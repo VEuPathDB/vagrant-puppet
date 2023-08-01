@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #Put the oracle install .tgz in the scratch directory and it will be 
 #copied over to /u01 for install through puppet on the vagrant VM.
 #If the file isn't in scratch this script will download it to scratch
