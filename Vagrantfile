@@ -16,8 +16,8 @@ VAGRANT_MEMORY     = settings['VAGRANT_MEMORY']     || 4096
 VAGRANT_BOXURL     = settings['VAGRANT_BOXURL']     || 'http://software.apidb.org/vagrant/centos-7-64-puppet.json'
 VAGRANT_BOX        = settings['VAGRANT_BOX']        || 'ebrc/centos-7-64-puppet'
 VAGRANT_HOSTNAME   = settings['VAGRANT_HOSTNAME']   || 'pup.apidb.org'
-VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || 'false'
-VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || 'false'
+VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || false
+VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || false
 
 Vagrant.configure(2) do |config|
 
@@ -52,7 +52,7 @@ Vagrant.configure(2) do |config|
   # Provisioning scripts
   config.vm.provision "shell", path: "addswap.sh"
   config.vm.provision "shell", path: "r10k.sh"
-  if VAGRANT_DBDL.eql? 'true'
+  if VAGRANT_DBDL.eql? true
     config.vm.provision "shell", path: "dbdl.sh"
   end
 

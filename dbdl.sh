@@ -4,7 +4,7 @@
 #If the file isn't in scratch this script will download it to scratch
 ###
 ###file name for the oracle install .tgz###
-ORA_VER="11.2.0.4_database.tgz"
+ORA_VER="11.2.0.4_1of7.zip"
 ###########################################
 if [ ! -d /u01 ];
 then
@@ -17,3 +17,4 @@ else
   echo "The $ORA_VER file is already scratch"
 fi  
 install -g root -o root -m 777 /vagrant/scratch/$ORA_VER /u01/$ORA_VER
+install -g root -o root -m 777 /vagrant/scratch/11.2.0.4_2of7.zip /u01/11.2.0.4_2of7.zip
