@@ -18,6 +18,7 @@ VAGRANT_BOX        = settings['VAGRANT_BOX']        || 'ebrc/centos-7-64-puppet'
 VAGRANT_HOSTNAME   = settings['VAGRANT_HOSTNAME']   || 'pup.apidb.org'
 VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || false
 VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || false
+VAGRANT_RUN_CUSTOM = settings['VAGRANT_RUN_CUSTOM'] || 'never'
 
 Vagrant.configure(2) do |config|
 
@@ -55,5 +56,12 @@ Vagrant.configure(2) do |config|
   if VAGRANT_DBDL.eql? true
     config.vm.provision "shell", path: "dbdl.sh"
   end
+
+  # Run custom scripts
+  config.vm.provision "shell", run: VAGRANT_RUN_CUSTOM, inline: <<-SHELL
+    for script in /vagrant/scratch/scripts/*; do
+      [ -x "$script" ] && $script
+    done
+  SHELL
 
 end
