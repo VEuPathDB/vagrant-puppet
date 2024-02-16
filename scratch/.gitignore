@@ -1,3 +1,5 @@
 *
 !.gitignore
 !code
+.ssh/
+certs/
