@@ -13,8 +13,8 @@ end
 # Overrides and defaults
 VAGRANT_CPUS       = settings['VAGRANT_CPUS']       || 4
 VAGRANT_MEMORY     = settings['VAGRANT_MEMORY']     || 4096
-VAGRANT_BOXURL     = settings['VAGRANT_BOXURL']     || 'http://software.apidb.org/vagrant/centos-7-64-puppet.json'
-VAGRANT_BOX        = settings['VAGRANT_BOX']        || 'ebrc/centos-7-64-puppet'
+VAGRANT_BOXURL     = settings['VAGRANT_BOXURL']     || ''
+VAGRANT_BOX        = settings['VAGRANT_BOX']        || 'VEuPathDB/rocky-8-64-puppet'
 VAGRANT_HOSTNAME   = settings['VAGRANT_HOSTNAME']   || 'pup.apidb.org'
 VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || false
 VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || false
@@ -22,7 +22,7 @@ VAGRANT_RUN_CUSTOM = settings['VAGRANT_RUN_CUSTOM'] || 'never'
 
 Vagrant.configure(2) do |config|
 
-  config.vm.box_url = VAGRANT_BOXURL
+  config.vm.box_url = VAGRANT_BOXURL unless VAGRANT_BOXURL.empty?
   config.vm.box = VAGRANT_BOX
   config.vm.hostname = VAGRANT_HOSTNAME
   config.vm.network :private_network, type: 'dhcp'
@@ -37,7 +37,6 @@ Vagrant.configure(2) do |config|
     # https://developer.hashicorp.com/vagrant/docs/synced-folders/nfs#root-privilege-requirement
     config.vm.synced_folder ".", "/vagrant", type: "nfs"
     config.vm.synced_folder "scratch/code/", "/etc/puppetlabs/code/", type: "nfs"
-    config.vm.synced_folder "r10k/", "/etc/puppetlabs/r10k/", type: "nfs"
   end
 
   # Virtualbox
@@ -47,12 +46,10 @@ Vagrant.configure(2) do |config|
     vbox.customize ["modifyvm", :id, "--ioapic", "on"]
 
     config.vm.synced_folder "scratch/code/", "/etc/puppetlabs/code/", owner: "root", group: "root"
-    config.vm.synced_folder "r10k/", "/etc/puppetlabs/r10k/", owner: "root", group: "root"
   end
 
   # Provisioning scripts
   config.vm.provision "shell", path: "addswap.sh"
-  config.vm.provision "shell", path: "r10k.sh"
   if VAGRANT_DBDL.eql? true
     config.vm.provision "shell", path: "dbdl.sh"
   end
