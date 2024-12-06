@@ -19,7 +19,7 @@ VAGRANT_HOSTNAME   = settings['VAGRANT_HOSTNAME']   || 'pup.apidb.org'
 VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || false
 VAGRANT_SSH_PORT   = settings['VAGRANT_SSH_PORT']   || 22
 VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || false
-VAGRANT_RUN_CUSTOM = settings['VAGRANT_RUN_CUSTOM'] || 'never'
+VAGRANT_RUN_CUSTOM = settings['VAGRANT_RUN_CUSTOM'] || 'once'
 VAGRANT_USE_VIRTIOFS = settings['VAGRANT_USE_VIRTIOFS'] || false
 
 Vagrant.configure(2) do |config|
