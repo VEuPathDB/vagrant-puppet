@@ -31,23 +31,23 @@ Vagrant.configure(2) do |config|
   config.ssh.port = VAGRANT_SSH_PORT
 
   # Libvirt settings
-  config.vm.provider :libvirt do |libvirt|
+  config.vm.provider :libvirt do |libvirt, override|
     libvirt.cpus = VAGRANT_CPUS
     libvirt.memory = VAGRANT_MEMORY
 
     # NFS: Make sure to enable UDP for NFSv3 on the host and set sudo rules:
     # https://developer.hashicorp.com/vagrant/docs/synced-folders/nfs#root-privilege-requirement
-    config.vm.synced_folder ".", "/vagrant", type: "nfs"
-    config.vm.synced_folder "scratch/code/", "/etc/puppetlabs/code/", type: "nfs"
+    override.vm.synced_folder ".", "/vagrant", type: "nfs"
+    override.vm.synced_folder "scratch/code", "/etc/puppetlabs/code/", type: "nfs"
   end
 
   # Virtualbox
-  config.vm.provider :virtualbox do |vbox|
+  config.vm.provider :virtualbox do |vbox, override|
     vbox.cpus = VAGRANT_CPUS
     vbox.memory = VAGRANT_MEMORY
     vbox.customize ["modifyvm", :id, "--ioapic", "on"]
 
-    config.vm.synced_folder "scratch/code/", "/etc/puppetlabs/code/", owner: "root", group: "root"
+    override.vm.synced_folder "scratch/code/", "/etc/puppetlabs/code/", owner: "root", group: "root"
   end
 
   # Provisioning scripts
