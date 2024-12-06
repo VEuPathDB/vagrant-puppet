@@ -17,6 +17,7 @@ VAGRANT_BOXURL     = settings['VAGRANT_BOXURL']     || ''
 VAGRANT_BOX        = settings['VAGRANT_BOX']        || 'VEuPathDB/rocky9-64-puppet'
 VAGRANT_HOSTNAME   = settings['VAGRANT_HOSTNAME']   || 'pup.apidb.org'
 VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || false
+VAGRANT_SSH_PORT   = settings['VAGRANT_SSH_PORT']   || 22
 VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || false
 VAGRANT_RUN_CUSTOM = settings['VAGRANT_RUN_CUSTOM'] || 'never'
 
@@ -27,6 +28,7 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = VAGRANT_HOSTNAME
   config.vm.network :private_network, type: 'dhcp'
   config.ssh.forward_agent = VAGRANT_SSHFORWARD
+  config.ssh.port = VAGRANT_SSH_PORT
 
   # Libvirt settings
   config.vm.provider :libvirt do |libvirt|
