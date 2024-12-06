@@ -20,6 +20,7 @@ VAGRANT_SSHFORWARD = settings['VAGRANT_SSHFORWARD'] || false
 VAGRANT_SSH_PORT   = settings['VAGRANT_SSH_PORT']   || 22
 VAGRANT_DBDL       = settings['VAGRANT_DBDL']       || false
 VAGRANT_RUN_CUSTOM = settings['VAGRANT_RUN_CUSTOM'] || 'never'
+VAGRANT_USE_VIRTIOFS = settings['VAGRANT_USE_VIRTIOFS'] || false
 
 Vagrant.configure(2) do |config|
 
@@ -35,10 +36,29 @@ Vagrant.configure(2) do |config|
     libvirt.cpus = VAGRANT_CPUS
     libvirt.memory = VAGRANT_MEMORY
 
+    if VAGRANT_USE_VIRTIOFS.eql? true
+      libvirt.memorybacking :access, :mode => "shared"
+      libvirt.memorybacking :source, :type => "memfd"
+    end
+
+    synced_folder_type = VAGRANT_USE_VIRTIOFS ? "virtiofs" : "nfs"
+
     # NFS: Make sure to enable UDP for NFSv3 on the host and set sudo rules:
     # https://developer.hashicorp.com/vagrant/docs/synced-folders/nfs#root-privilege-requirement
-    override.vm.synced_folder ".", "/vagrant", type: "nfs"
-    override.vm.synced_folder "scratch/code", "/etc/puppetlabs/code/", type: "nfs"
+    #
+    # VIRTIOFS: make sure you have virtiofsd installed on the host and you configured shared memory
+    # setting for libvirt
+    # https://vagrant-libvirt.github.io/vagrant-libvirt/examples.html#synced-folders
+    override.vm.synced_folder ".", "/vagrant", type: synced_folder_type
+    override.vm.synced_folder "scratch/code", "/etc/puppetlabs/code/", type: synced_folder_type
+    override.vm.synced_folder "../puppet-control", "/vagrant/scratch/puppet-control", type: synced_folder_type
+    override.vm.synced_folder "../puppet-profiles", "/vagrant/scratch/puppet-profiles", type: synced_folder_type
+    override.vm.synced_folder "../puppet-roles", "/vagrant/scratch/puppet-roles", type: synced_folder_type
+    override.vm.synced_folder "../puppet-hiera", "/vagrant/scratch/puppet-hiera", type: synced_folder_type
+    override.vm.synced_folder "../puppet-ebrc_packages", "/vagrant/scratch/puppet-ebrc_packages", type: synced_folder_type
+    override.vm.synced_folder "../puppet-iscsi", "/vagrant/scratch/puppet-iscsi", type: synced_folder_type
+    override.vm.synced_folder "../puppet-authorized_keys", "/vagrant/scratch/puppet-authorized_keys", type: synced_folder_type
+    override.vm.synced_folder "../puppet-users", "/vagrant/scratch/puppet-users", type: synced_folder_type
   end
 
   # Virtualbox
