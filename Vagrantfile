@@ -51,14 +51,7 @@ Vagrant.configure(2) do |config|
     # https://vagrant-libvirt.github.io/vagrant-libvirt/examples.html#synced-folders
     override.vm.synced_folder ".", "/vagrant", type: synced_folder_type
     override.vm.synced_folder "scratch/code", "/etc/puppetlabs/code/", type: synced_folder_type
-    override.vm.synced_folder "../puppet-control", "/vagrant/scratch/puppet-control", type: synced_folder_type
-    override.vm.synced_folder "../puppet-profiles", "/vagrant/scratch/puppet-profiles", type: synced_folder_type
-    override.vm.synced_folder "../puppet-roles", "/vagrant/scratch/puppet-roles", type: synced_folder_type
-    override.vm.synced_folder "../puppet-hiera", "/vagrant/scratch/puppet-hiera", type: synced_folder_type
-    override.vm.synced_folder "../puppet-ebrc_packages", "/vagrant/scratch/puppet-ebrc_packages", type: synced_folder_type
-    override.vm.synced_folder "../puppet-iscsi", "/vagrant/scratch/puppet-iscsi", type: synced_folder_type
-    override.vm.synced_folder "../puppet-authorized_keys", "/vagrant/scratch/puppet-authorized_keys", type: synced_folder_type
-    override.vm.synced_folder "../puppet-users", "/vagrant/scratch/puppet-users", type: synced_folder_type
+
   end
 
   # Virtualbox
